@@ -10,6 +10,9 @@ public class BoardController : MonoBehaviour {
     [SerializeField]
     GameController gameController;
 
+    [SerializeField]
+    AudioSource SoundPlayer;
+
     ButtonController[] buttonControllers;
 
     Vector2[] buttonPositions = new Vector2[16];
@@ -124,15 +127,15 @@ public class BoardController : MonoBehaviour {
             numbers[i] = i + 1;
         }
 
-        //Shuffle(numbers);
+        Shuffle(numbers);
 
         for (int i = 0; i < buttons.Length; i++)
         {
             buttonControllers[i].SetNumber(numbers[i]);
         }
 
-        int to_empty_i = 4;//Random.Range(1, 5);
-        int to_empty_j = 3;//Random.Range(1, 5);
+        int to_empty_i = Random.Range(1, 5);
+        int to_empty_j = Random.Range(1, 5);
 
         MoveButton(to_empty_i, to_empty_j, empty_i, empty_j, true);
 
@@ -146,6 +149,12 @@ public class BoardController : MonoBehaviour {
         {
             return;
         }
+        
+        if(movingButtons.Count > 0)
+        {
+            return;
+        }
+
 
         int i = buttonControllers[at].GetI();
         int j = buttonControllers[at].GetJ();
@@ -173,6 +182,7 @@ public class BoardController : MonoBehaviour {
 
             empty_j = j;
             gameController.OnButtonBoardMove();
+            SoundPlayer.PlayOneShot(SoundPlayer.clip);
         }
         else if (j == empty_j)
         {
@@ -196,6 +206,7 @@ public class BoardController : MonoBehaviour {
 
             empty_i = i;
             gameController.OnButtonBoardMove();
+            SoundPlayer.PlayOneShot(SoundPlayer.clip);
         }
     }
 

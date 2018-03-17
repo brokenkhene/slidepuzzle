@@ -85,7 +85,6 @@ public class BoardController : MonoBehaviour {
 
         if (i == empty_i)
         {
-            Debug.Log("เลื่อนแนวนอน");
             if (j < empty_j)
             {
                 //เลื่อนขวา
@@ -94,22 +93,48 @@ public class BoardController : MonoBehaviour {
                     MoveButton(i, j_to_move, i, j_to_move + 1);
                 }
 
-                empty_j = j;
             }
             else
             {
-                //เลื่อนซ้าย
+                //เลื่อนซ้าย j > empty_j
+                for (int j_to_move = j; j_to_move > empty_j; j_to_move--)
+                {
+                    MoveButton(i, j_to_move, i, j_to_move - 1);
+                }
+
             }
 
+            empty_j = j;
         }
         else if (j == empty_j)
         {
-            Debug.Log("เลื่อนแนวตั้ง");
+            if (i < empty_i)
+            {
+                //เลื่อนลง
+                for (int i_to_move = i; i_to_move < empty_i; i_to_move++)
+                {
+                    MoveButton(i_to_move, j, i_to_move + 1, j);
+                }
+
+            }
+            else
+            {
+                //เลื่อนขึ้น
+                for (int i_to_move = i; i_to_move > empty_i; i_to_move--)
+                {
+                    MoveButton(i_to_move, j, i_to_move - 1, j);
+                }
+            }
+
+            empty_i = i;
         }
-        else
+
+        //Set IJ From Future
+        for (int loop = 0; loop < buttonControllers.Length; loop++)
         {
-            Debug.Log("ไม่เลื่อน");
+            buttonControllers[loop].SetIJFromFuture();
         }
+        
     }
 
     public void MoveButton(int i_from, int j_from, int i_to, int j_to)
@@ -128,7 +153,7 @@ public class BoardController : MonoBehaviour {
         {
             Vector2 newPosition = FindButtonPosition(i_to, j_to);
             buttonControllerIfromJfrom.transform.position = new Vector3(newPosition.x, newPosition.y, buttonControllerIfromJfrom.transform.position.z);
-            buttonControllerIfromJfrom.SetIJ(i_to, j_to);
+            buttonControllerIfromJfrom.SetFutureIJ(i_to, j_to);
         }
     }
 

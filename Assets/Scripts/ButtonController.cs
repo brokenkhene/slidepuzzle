@@ -29,6 +29,9 @@ public class ButtonController : MonoBehaviour {
         return j;
     }
 
+    int future_i = 0;
+    int future_j = 0;
+
     void Start ()
     {
         numberSprites = Resources.LoadAll<Sprite>("Sprites/number");
@@ -43,10 +46,31 @@ public class ButtonController : MonoBehaviour {
         index = index_;
     }
 
+    public void SetFutureIJ(int i , int j)
+    {
+        future_i = i;
+        future_j = j;
+    }
+
     public void SetIJ(int i_, int j_)
     {
         i = i_;
         j = j_;
+    }
+
+    public void SetIJFromFuture()
+    {
+        if(future_i > 0)
+        {
+            i = future_i;
+            future_i = 0;
+        }
+
+        if (future_j > 0)
+        {
+            j = future_j;
+            future_j = 0;
+        }
     }
 
     public void SetNumber(int number)

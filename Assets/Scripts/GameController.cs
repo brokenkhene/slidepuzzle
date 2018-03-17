@@ -20,6 +20,9 @@ public class GameController : MonoBehaviour {
     [SerializeField]
     Text textMoves;
 
+    [SerializeField]
+    PanelFinishedController panelFinishedController;
+
     public enum GameState
     {
         READY, //0
@@ -49,10 +52,13 @@ public class GameController : MonoBehaviour {
     {
         gameState = state;
 
-        if(gameState == GameState.READY)
+        if (gameState == GameState.READY)
         {
             startButton.SetActive(true);
             resetButton.SetActive(false);
+
+            textTimer.gameObject.SetActive(false);
+            textMoves.gameObject.SetActive(false);
 
             timer = 0;
             textTimer.text = ToNiceTime(timer);
@@ -62,12 +68,20 @@ public class GameController : MonoBehaviour {
         }
         else if (gameState == GameState.PLAYING)
         {
+            textTimer.gameObject.SetActive(true);
+            textMoves.gameObject.SetActive(true);
+
             startButton.SetActive(false);
             resetButton.SetActive(true);
         }
-        else if(gameState == GameState.FINISH)
+        else if (gameState == GameState.FINISH)
         {
+            textTimer.gameObject.SetActive(false);
+            textMoves.gameObject.SetActive(false);
+            startButton.SetActive(false);
+            resetButton.SetActive(false);
 
+            panelFinishedController.Show(ToNiceTime(timer), moves + "");
         }
     }
 
@@ -75,6 +89,11 @@ public class GameController : MonoBehaviour {
     {
         moves++;
         textMoves.text = moves + "";
+    }
+
+    public void OnBoardFinished()
+    {
+        ChangeGameState(GameState.FINISH);
     }
 
     public void OnStartButtonClick()
@@ -86,6 +105,12 @@ public class GameController : MonoBehaviour {
     public void OnResetButtonClick()
     {
         boardController.ResetBoard();
+        ChangeGameState(GameState.READY);
+    }
+
+    public void OnButtonCloseClick()
+    {
+        panelFinishedController.gameObject.SetActive(false);
         ChangeGameState(GameState.READY);
     }
 

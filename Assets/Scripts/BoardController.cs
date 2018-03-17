@@ -91,15 +91,15 @@ public class BoardController : MonoBehaviour {
             numbers[i] = i + 1;
         }
 
-        Shuffle(numbers);
+        //Shuffle(numbers);
 
         for (int i = 0; i < buttons.Length; i++)
         {
             buttonControllers[i].SetNumber(numbers[i]);
         }
 
-        int to_empty_i = Random.Range(1, 5);
-        int to_empty_j = Random.Range(1, 5);
+        int to_empty_i = 4;//Random.Range(1, 5);
+        int to_empty_j = 3;//Random.Range(1, 5);
 
         MoveButton(to_empty_i, to_empty_j, empty_i, empty_j);
 
@@ -144,7 +144,15 @@ public class BoardController : MonoBehaviour {
             }
 
             empty_j = j;
+
+            //Set IJ From Future
+            for (int loop = 0; loop < buttonControllers.Length; loop++)
+            {
+                buttonControllers[loop].SetIJFromFuture();
+            }
+
             gameController.OnButtonBoardMove();
+            CheckFinish();
         }
         else if (j == empty_j)
         {
@@ -167,14 +175,39 @@ public class BoardController : MonoBehaviour {
             }
 
             empty_i = i;
+
+            //Set IJ From Future
+            for (int loop = 0; loop < buttonControllers.Length; loop++)
+            {
+                buttonControllers[loop].SetIJFromFuture();
+            }
+
             gameController.OnButtonBoardMove();
+            CheckFinish();
+        }
+    }
+
+    public void CheckFinish()
+    {
+        //เช็คว่าเลขเรียงกันรึป่าว
+        if (empty_i != 4 || empty_j != 4)
+        {
+            return;
         }
 
-        //Set IJ From Future
         for (int loop = 0; loop < buttonControllers.Length; loop++)
         {
-            buttonControllers[loop].SetIJFromFuture();
+            int i = buttonControllers[loop].GetI();
+            int j = buttonControllers[loop].GetJ();
+
+            int expectedNumber = (i - 1) * 4 + j;
+            int number = buttonControllers[loop].GetNumber();
+            if(expectedNumber != number)
+            {
+                return;
+            }
         }
+        gameController.OnBoardFinished();
     }
 
     public void MoveButton(int i_from, int j_from, int i_to, int j_to)

@@ -32,6 +32,13 @@ public class ButtonController : MonoBehaviour {
     int future_i = 0;
     int future_j = 0;
 
+    int _number;
+
+    public int GetNumber()
+    {
+        return _number;
+    }
+
     void Start ()
     {
         numberSprites = Resources.LoadAll<Sprite>("Sprites/number");
@@ -75,7 +82,8 @@ public class ButtonController : MonoBehaviour {
 
     public void SetNumber(int number)
     {
-       if(number < 10)
+        _number = number;
+       if (number < 10)
         {
             numberAlone.SetActive(true);
             numberCouple1.SetActive(false);

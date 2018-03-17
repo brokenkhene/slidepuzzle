@@ -181,6 +181,7 @@
 Assets/Scripts/BoardController.cs
 Assets/Scripts/ButtonController.cs
 Assets/Scripts/GameController.cs
+Assets/Scripts/PanelFinishedController.cs
 -r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\System.Runtime.Serialization.dll"
 -r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\System.Xml.Linq.dll"
 -r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\UnityScript.dll"

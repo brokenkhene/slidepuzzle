@@ -180,8 +180,10 @@
 -define:ENABLE_VSTU
 Assets/Scripts/BoardController.cs
 Assets/Scripts/ButtonController.cs
+Assets/Scripts/CameraController.cs
 Assets/Scripts/GameController.cs
 Assets/Scripts/PanelFinishedController.cs
+Assets/Scripts/UIController.cs
 -r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\System.Runtime.Serialization.dll"
 -r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\System.Xml.Linq.dll"
 -r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\UnityScript.dll"

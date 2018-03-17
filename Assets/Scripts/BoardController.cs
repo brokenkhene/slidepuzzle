@@ -7,6 +7,9 @@ public class BoardController : MonoBehaviour {
     [SerializeField]
     GameObject[] buttons;
 
+    [SerializeField]
+    GameController gameController;
+
     ButtonController[] buttonControllers;
 
     Vector2[] buttonPositions = new Vector2[16];
@@ -111,6 +114,11 @@ public class BoardController : MonoBehaviour {
 
     void OnButtonClickAt(int at)
     {
+        if (GameController.gameState != GameController.GameState.PLAYING)
+        {
+            return;
+        }
+
         int i = buttonControllers[at].GetI();
         int j = buttonControllers[at].GetJ();
 
@@ -136,6 +144,7 @@ public class BoardController : MonoBehaviour {
             }
 
             empty_j = j;
+            gameController.OnButtonBoardMove();
         }
         else if (j == empty_j)
         {
@@ -158,6 +167,7 @@ public class BoardController : MonoBehaviour {
             }
 
             empty_i = i;
+            gameController.OnButtonBoardMove();
         }
 
         //Set IJ From Future
@@ -165,7 +175,6 @@ public class BoardController : MonoBehaviour {
         {
             buttonControllers[loop].SetIJFromFuture();
         }
-        
     }
 
     public void MoveButton(int i_from, int j_from, int i_to, int j_to)

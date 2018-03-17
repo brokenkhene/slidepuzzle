@@ -10,7 +10,7 @@ public class BoardController : MonoBehaviour {
     void Start () {
         float w = GetComponent<SpriteRenderer>().bounds.size.x;
         float h = GetComponent<SpriteRenderer>().bounds.size.y;
-
+        
         float button_w = w / 4;
         float button_h = h / 4;
 
@@ -40,6 +40,7 @@ public class BoardController : MonoBehaviour {
         for(int i = 0; i < buttons.Length; i++)
         {
             buttons[i].transform.position = new Vector3(button_positions[i].x, button_positions[i].y, buttons[i].transform.position.z);
+            buttons[i].GetComponent<ButtonController>().SetNumber(i + 1);
         }
 
     }

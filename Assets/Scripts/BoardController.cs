@@ -50,22 +50,22 @@ public class BoardController : MonoBehaviour {
             }
         }
 
-        // Initial Loop
+        ResetBoard();
+    }
+
+    void Update() {
+
+    }
+
+    public void ResetBoard()
+    {
         int i_ = 1;
         int j_ = 1;
-
-        int[] numbers = new int[buttons.Length];
-        for(int i = 0; i < numbers.Length; i++)
-        {
-            numbers[i] = i + 1;
-        }
-
-        Shuffle(numbers);
 
         for (int i = 0; i < buttons.Length; i++)
         {
             buttons[i].transform.position = new Vector3(buttonPositions[i].x, buttonPositions[i].y, buttons[i].transform.position.z);
-            buttonControllers[i].SetNumber(numbers[i]);
+            buttonControllers[i].SetNumber(i + 1);
             buttonControllers[i].SetIndex(i);
             buttonControllers[i].SetIJ(i_, j_);
             j_++;
@@ -76,13 +76,29 @@ public class BoardController : MonoBehaviour {
             }
         }
 
-        //กำหนดช่องว่างเริ่มต้น
-       
+        empty_i = 4;
+        empty_j = 4;
+    }
+
+    public void ShuffleBoard()
+    {
+        int[] numbers = new int[buttons.Length];
+        for (int i = 0; i < numbers.Length; i++)
+        {
+            numbers[i] = i + 1;
+        }
+
+        Shuffle(numbers);
+
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            buttonControllers[i].SetNumber(numbers[i]);
+        }
 
         int to_empty_i = Random.Range(1, 5);
         int to_empty_j = Random.Range(1, 5);
 
-        MoveButton(to_empty_i, to_empty_j, 4, 4);
+        MoveButton(to_empty_i, to_empty_j, empty_i, empty_j);
 
         for (int loop = 0; loop < buttonControllers.Length; loop++)
         {
@@ -91,10 +107,6 @@ public class BoardController : MonoBehaviour {
 
         empty_i = to_empty_i;
         empty_j = to_empty_j;
-    }
-
-    void Update() {
-
     }
 
     void OnButtonClickAt(int at)

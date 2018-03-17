@@ -97,7 +97,27 @@ public class GameController : MonoBehaviour {
             startButton.SetActive(false);
             resetButton.SetActive(false);
 
-            panelFinishedController.Show(ToNiceTime(timer), moves + "");
+
+            float bestTimer = PlayerPrefs.GetFloat("best_timer");
+            bool newBestScore = false;
+
+            if(bestTimer == 0.0f)
+            {
+                PlayerPrefs.SetFloat("best_timer", timer);
+                PlayerPrefs.SetInt("best_moves", moves);
+            }
+            else
+            {
+                if(timer < bestTimer)
+                {
+                    PlayerPrefs.SetFloat("best_timer", timer);
+                    PlayerPrefs.SetInt("best_moves", moves);
+                    newBestScore = true;
+                }
+            }
+
+            panelFinishedController.Show(ToNiceTime(timer), moves + "", ToNiceTime(PlayerPrefs.GetFloat("best_timer")), PlayerPrefs.GetInt("best_moves") + "", newBestScore);
+
         }
     }
 

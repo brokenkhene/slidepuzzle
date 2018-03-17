@@ -40,6 +40,24 @@ public class UIController : MonoBehaviour {
     [SerializeField]
     RectTransform pfTextMoves;
 
+    [SerializeField]
+    RectTransform labelBest;
+
+    [SerializeField]
+    RectTransform bestLabelTimer;
+
+    [SerializeField]
+    RectTransform bestTextTimer;
+
+    [SerializeField]
+    RectTransform bestLabelMoves;
+
+    [SerializeField]
+    RectTransform bestTextMoves;
+
+    [SerializeField]
+    RectTransform labelNew;
+
     void Start()
     {
         float expandRate = Screen.width / 164f;
@@ -95,6 +113,11 @@ public class UIController : MonoBehaviour {
 
         pfTextTimer.position = new Vector3(pfLabelTimer.position.x + pfLabelTimer.sizeDelta.x + 3 * expandRate, pfLabelTimer.position.y + (pfLabelTimer.sizeDelta.y * 0.5f) / 2, pfTextTimer.position.z);
 
+        // label new 
+        labelNew.sizeDelta = new Vector2(labelNew.sizeDelta.x * expandRate, labelNew.sizeDelta.y * expandRate);
+
+        labelNew.position = new Vector3(pfTextTimer.position.x, pfTextTimer.position.y - pfTextTimer.sizeDelta.y - 2 * expandRate, labelNew.position.y);
+
         //label move
         pfLabelMoves.sizeDelta = new Vector2(pfLabelMoves.sizeDelta.x * expandRate, pfLabelMoves.sizeDelta.y * expandRate);
 
@@ -104,6 +127,31 @@ public class UIController : MonoBehaviour {
         pfTextMoves.sizeDelta = textMoves.sizeDelta;
 
         pfTextMoves.position = new Vector3(pfLabelMoves.position.x + pfLabelMoves.sizeDelta.x + 3 * expandRate, pfTextTimer.position.y, pfTextMoves.position.z);
+
+        //label best
+        labelBest.sizeDelta = new Vector2(labelBest.sizeDelta.x * expandRate, labelBest.sizeDelta.y * expandRate);
+
+        labelBest.localPosition = new Vector3(labelBest.localPosition.x + 10 * expandRate, labelBest.localPosition.y, labelBest.localPosition.z);
+
+        //label timer
+        bestLabelTimer.sizeDelta = new Vector2(bestLabelTimer.sizeDelta.x * expandRate, bestLabelTimer.sizeDelta.y * expandRate);
+
+        bestLabelTimer.position = new Vector3(pfLabelTimer.position.x, labelBest.position.y - 5 * expandRate, bestLabelTimer.localPosition.z);
+
+        //text timer
+        bestTextTimer.sizeDelta = textTimer.sizeDelta;
+
+        bestTextTimer.position = new Vector3(pfTextTimer.position.x, bestLabelTimer.position.y + (bestLabelTimer.sizeDelta.y * 0.5f) / 2, bestTextTimer.position.z);
+
+        //label move
+        bestLabelMoves.sizeDelta = new Vector2(bestLabelMoves.sizeDelta.x * expandRate, bestLabelMoves.sizeDelta.y * expandRate);
+
+        bestLabelMoves.position = new Vector3(pfLabelMoves.position.x, bestLabelTimer.position.y, bestLabelMoves.localPosition.z);
+
+        //text moves
+        bestTextMoves.sizeDelta = textMoves.sizeDelta;
+
+        bestTextMoves.position = new Vector3(pfTextMoves.position.x, bestTextTimer.position.y, bestTextMoves.position.z);
 
     }
 

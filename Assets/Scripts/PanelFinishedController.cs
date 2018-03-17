@@ -11,15 +11,30 @@ public class PanelFinishedController : MonoBehaviour {
     [SerializeField]
     Text textMoves;
 
-	void Start () {
+    [SerializeField]
+    Text bestTextTimer;
+
+    [SerializeField]
+    Text bestTextMoves;
+
+    [SerializeField]
+    GameObject labelNew;
+
+    void Start () {
 		
 	}
 	
-    public void Show(string strTimer, string strMoves)
+    public void Show(string strTimer, string strMoves, string strBestTimer, string strBestMoves, bool newBestScore)
     {
         gameObject.SetActive(true);
 
         textTimer.text = strTimer;
         textMoves.text = strMoves;
+
+        bestTextTimer.text = strBestTimer;
+        bestTextMoves.text = strBestMoves;
+
+        labelNew.SetActive(newBestScore);
+
     }
 }

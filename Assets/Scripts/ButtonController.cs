@@ -15,6 +15,20 @@ public class ButtonController : MonoBehaviour {
 
     Sprite[] numberSprites;
 
+    int index;
+
+    int i;
+    public int GetI()
+    {
+        return i;
+    }
+
+    int j;
+    public int GetJ()
+    {
+        return j;
+    }
+
     void Start ()
     {
         numberSprites = Resources.LoadAll<Sprite>("Sprites/number");
@@ -23,6 +37,17 @@ public class ButtonController : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void SetIndex(int index_)
+    {
+        index = index_;
+    }
+
+    public void SetIJ(int i_, int j_)
+    {
+        i = i_;
+        j = j_;
+    }
 
     public void SetNumber(int number)
     {
@@ -42,6 +67,14 @@ public class ButtonController : MonoBehaviour {
 
             numberCouple1.GetComponent<SpriteRenderer>().sprite = numberSprites[1];
             numberCouple2.GetComponent<SpriteRenderer>().sprite = numberSprites[number - 10];
+        }
+    }
+
+    private void OnMouseDown()
+    {
+        if (transform.parent != null)
+        {
+            transform.parent.SendMessage("OnButtonClickAt", index);
         }
     }
 }

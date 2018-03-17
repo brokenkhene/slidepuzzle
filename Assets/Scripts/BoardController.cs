@@ -6,8 +6,17 @@ public class BoardController : MonoBehaviour {
 
     [SerializeField]
     GameObject[] buttons;
-    
+
+    ButtonController[] buttonControllers;
+
     void Start () {
+
+        buttonControllers = new ButtonController[buttons.Length];
+        for(int i = 0; i < buttons.Length; i++)
+        {
+            buttonControllers[i] = buttons[i].GetComponent<ButtonController>();
+        }
+
         float w = GetComponent<SpriteRenderer>().bounds.size.x;
         float h = GetComponent<SpriteRenderer>().bounds.size.y;
         
@@ -37,15 +46,44 @@ public class BoardController : MonoBehaviour {
             }
         }
 
-        for(int i = 0; i < buttons.Length; i++)
+        // Initial Loop
+        int i_ = 1;
+        int j_ = 1;
+
+        for (int i = 0; i < buttons.Length; i++)
         {
             buttons[i].transform.position = new Vector3(button_positions[i].x, button_positions[i].y, buttons[i].transform.position.z);
-            buttons[i].GetComponent<ButtonController>().SetNumber(i + 1);
+            buttonControllers[i].SetNumber(i + 1);
+            buttonControllers[i].SetIndex(i);
+            buttonControllers[i].SetIJ(i_, j_);
+            j_++;
+            if(j_ > 4)
+            {
+                j_ = 1;
+                i_++;
+            }
         }
+
+
 
     }
 
     void Update () {
 		
 	}
+
+    void OnButtonClickAt(int at)
+    {
+        int i = buttonControllers[at].GetI();
+        int j = buttonControllers[at].GetJ();
+
+        Debug.Log(i + " " + j);
+
+        /*1. ดึงลุกออกมาตามที่อยู่ at
+        2. เช็ค i j ของลูก
+        3. เช็คว่า i j ของลูก มีตัวไหน ตรงกับตัว empty หรือเปล่า
+        4. ถ้า มีในข้อ 3 จะทำการเลื่อน ถ้าไม่มี ก็ไม่ต้องทำอะไร
+        
+        */
+    }
 }

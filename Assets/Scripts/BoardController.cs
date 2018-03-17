@@ -17,6 +17,24 @@ public class BoardController : MonoBehaviour {
     int empty_i;
     int empty_j;
 
+    struct MovingButton
+    {
+        public ButtonController bc;
+        public Vector3 des;
+        public int i;
+        public int j;
+
+        public MovingButton(ButtonController bc_, Vector3 des_, int i_, int j_)
+        {
+            bc = bc_;
+            des = des_;
+            i = i_;
+            j = j_;
+        }
+    }
+
+    List<MovingButton> movingButtons = new List<MovingButton>();
+
     void Start() {
 
         buttonControllers = new ButtonController[buttons.Length];
@@ -56,8 +74,23 @@ public class BoardController : MonoBehaviour {
         ResetBoard();
     }
 
-    void Update() {
-
+    void Update()
+    {
+        if (movingButtons.Count > 0)
+        {
+            for (int i = movingButtons.Count - 1; i >= 0; i--)
+            {
+                movingButtons[i].bc.transform.position = Vector3.Lerp(movingButtons[i].bc.transform.position, movingButtons[i].des, Time.deltaTime * 20);
+                float dist = Vector3.Distance(movingButtons[i].bc.transform.position, movingButtons[i].des);
+                if (dist < 0.0002)
+                {
+                    movingButtons[i].bc.transform.position = movingButtons[i].des;
+                    movingButtons[i].bc.SetIJ(movingButtons[i].i, movingButtons[i].j);
+                    CheckFinish();
+                    movingButtons.RemoveAt(i);
+                }
+            }
+        }
     }
 
     public void ResetBoard()
@@ -101,12 +134,7 @@ public class BoardController : MonoBehaviour {
         int to_empty_i = 4;//Random.Range(1, 5);
         int to_empty_j = 3;//Random.Range(1, 5);
 
-        MoveButton(to_empty_i, to_empty_j, empty_i, empty_j);
-
-        for (int loop = 0; loop < buttonControllers.Length; loop++)
-        {
-            buttonControllers[loop].SetIJFromFuture();
-        }
+        MoveButton(to_empty_i, to_empty_j, empty_i, empty_j, true);
 
         empty_i = to_empty_i;
         empty_j = to_empty_j;
@@ -144,15 +172,7 @@ public class BoardController : MonoBehaviour {
             }
 
             empty_j = j;
-
-            //Set IJ From Future
-            for (int loop = 0; loop < buttonControllers.Length; loop++)
-            {
-                buttonControllers[loop].SetIJFromFuture();
-            }
-
             gameController.OnButtonBoardMove();
-            CheckFinish();
         }
         else if (j == empty_j)
         {
@@ -175,15 +195,7 @@ public class BoardController : MonoBehaviour {
             }
 
             empty_i = i;
-
-            //Set IJ From Future
-            for (int loop = 0; loop < buttonControllers.Length; loop++)
-            {
-                buttonControllers[loop].SetIJFromFuture();
-            }
-
             gameController.OnButtonBoardMove();
-            CheckFinish();
         }
     }
 
@@ -210,7 +222,7 @@ public class BoardController : MonoBehaviour {
         gameController.OnBoardFinished();
     }
 
-    public void MoveButton(int i_from, int j_from, int i_to, int j_to)
+    public void MoveButton(int i_from, int j_from, int i_to, int j_to, bool now = false)
     {
         ButtonController buttonControllerIfromJfrom = null;
 
@@ -225,8 +237,16 @@ public class BoardController : MonoBehaviour {
         if(buttonControllerIfromJfrom != null)
         {
             Vector2 newPosition = FindButtonPosition(i_to, j_to);
-            buttonControllerIfromJfrom.transform.position = new Vector3(newPosition.x, newPosition.y, buttonControllerIfromJfrom.transform.position.z);
-            buttonControllerIfromJfrom.SetFutureIJ(i_to, j_to);
+            if (now)
+            {
+                buttonControllerIfromJfrom.transform.position = new Vector3(newPosition.x, newPosition.y, buttonControllerIfromJfrom.transform.position.z);
+                buttonControllerIfromJfrom.SetIJ(i_to, j_to);
+            }
+            else
+            {
+                movingButtons.Add(new MovingButton(buttonControllerIfromJfrom, new Vector3(newPosition.x, newPosition.y, buttonControllerIfromJfrom.transform.position.z), i_to, j_to));
+            }
+            
         }
     }
 

@@ -18,7 +18,13 @@ public class GameController : MonoBehaviour {
     Text textTimer;
 
     [SerializeField]
+    GameObject labelTimer;
+
+    [SerializeField]
     Text textMoves;
+
+    [SerializeField]
+    GameObject labelMoves;
 
     [SerializeField]
     PanelFinishedController panelFinishedController;
@@ -58,7 +64,10 @@ public class GameController : MonoBehaviour {
             resetButton.SetActive(false);
 
             textTimer.gameObject.SetActive(false);
+            labelTimer.SetActive(false);
+
             textMoves.gameObject.SetActive(false);
+            labelMoves.SetActive(false);
 
             timer = 0;
             textTimer.text = ToNiceTime(timer);
@@ -69,7 +78,10 @@ public class GameController : MonoBehaviour {
         else if (gameState == GameState.PLAYING)
         {
             textTimer.gameObject.SetActive(true);
+            labelTimer.SetActive(true);
+
             textMoves.gameObject.SetActive(true);
+            labelMoves.SetActive(true);
 
             startButton.SetActive(false);
             resetButton.SetActive(true);
@@ -77,7 +89,11 @@ public class GameController : MonoBehaviour {
         else if (gameState == GameState.FINISH)
         {
             textTimer.gameObject.SetActive(false);
+            labelTimer.SetActive(false);
+
             textMoves.gameObject.SetActive(false);
+            labelMoves.SetActive(false);
+
             startButton.SetActive(false);
             resetButton.SetActive(false);
 

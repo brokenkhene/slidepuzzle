@@ -20,17 +20,28 @@ public class BoardController : MonoBehaviour {
 
         Vector2[] button_positions = new Vector2[16];
 
-        Vector2 move_right = new Vector2(button_w, 0);
 
-        button_positions[0] = top_left;
-        button_positions[1] = button_positions[0] + move_right;
-        button_positions[2] = button_positions[1] + move_right;
-        button_positions[3] = button_positions[2] + move_right;
+        int multiply_x = 0;
+        int multiply_y = 0;
 
-        buttons[0].transform.position = new Vector3(button_positions[0].x, button_positions[0].y, buttons[0].transform.position.y);
-        buttons[1].transform.position = new Vector3(button_positions[1].x, button_positions[1].y, buttons[1].transform.position.y);
-        buttons[2].transform.position = new Vector3(button_positions[2].x, button_positions[2].y, buttons[2].transform.position.y);
-        buttons[3].transform.position = new Vector3(button_positions[3].x, button_positions[3].y, buttons[3].transform.position.y);
+        for (int i = 0; i < button_positions.Length; i++)
+        {
+            Vector2 move = new Vector2(button_w * multiply_x, - button_h * multiply_y);
+            button_positions[i] = top_left + move;
+            multiply_x++;
+
+            if(multiply_x >= 4)
+            {
+                multiply_x = 0;
+                multiply_y++;
+            }
+        }
+
+        for(int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].transform.position = new Vector3(button_positions[i].x, button_positions[i].y, buttons[i].transform.position.z);
+        }
+
     }
 
     void Update () {

@@ -9,17 +9,22 @@ public class BoardController : MonoBehaviour {
 
     ButtonController[] buttonControllers;
 
-    void Start () {
+    Vector2[] buttonPositions = new Vector2[16];
+
+    int empty_i;
+    int empty_j;
+
+    void Start() {
 
         buttonControllers = new ButtonController[buttons.Length];
-        for(int i = 0; i < buttons.Length; i++)
+        for (int i = 0; i < buttons.Length; i++)
         {
             buttonControllers[i] = buttons[i].GetComponent<ButtonController>();
         }
 
         float w = GetComponent<SpriteRenderer>().bounds.size.x;
         float h = GetComponent<SpriteRenderer>().bounds.size.y;
-        
+
         float button_w = w / 4;
         float button_h = h / 4;
 
@@ -27,19 +32,18 @@ public class BoardController : MonoBehaviour {
 
         Vector2 top_left = new Vector2((-w / 2) + (button_w / 2), (h / 2) - (button_h / 2));
 
-        Vector2[] button_positions = new Vector2[16];
 
 
         int multiply_x = 0;
         int multiply_y = 0;
 
-        for (int i = 0; i < button_positions.Length; i++)
+        for (int i = 0; i < buttonPositions.Length; i++)
         {
-            Vector2 move = new Vector2(button_w * multiply_x, - button_h * multiply_y);
-            button_positions[i] = top_left + move;
+            Vector2 move = new Vector2(button_w * multiply_x, -button_h * multiply_y);
+            buttonPositions[i] = top_left + move;
             multiply_x++;
 
-            if(multiply_x >= 4)
+            if (multiply_x >= 4)
             {
                 multiply_x = 0;
                 multiply_y++;
@@ -52,38 +56,102 @@ public class BoardController : MonoBehaviour {
 
         for (int i = 0; i < buttons.Length; i++)
         {
-            buttons[i].transform.position = new Vector3(button_positions[i].x, button_positions[i].y, buttons[i].transform.position.z);
+            buttons[i].transform.position = new Vector3(buttonPositions[i].x, buttonPositions[i].y, buttons[i].transform.position.z);
             buttonControllers[i].SetNumber(i + 1);
             buttonControllers[i].SetIndex(i);
             buttonControllers[i].SetIJ(i_, j_);
             j_++;
-            if(j_ > 4)
+            if (j_ > 4)
             {
                 j_ = 1;
                 i_++;
             }
         }
 
-
+        //กำหนดช่องว่างเริ่มต้น
+        empty_i = 4;
+        empty_j = 4;
 
     }
 
-    void Update () {
-		
-	}
+    void Update() {
+
+    }
 
     void OnButtonClickAt(int at)
     {
         int i = buttonControllers[at].GetI();
         int j = buttonControllers[at].GetJ();
 
-        Debug.Log(i + " " + j);
+        if (i == empty_i)
+        {
+            Debug.Log("เลื่อนแนวนอน");
+            if (j < empty_j)
+            {
+                //เลื่อนขวา
+                for (int j_to_move = j; j_to_move < empty_j; j_to_move++)
+                {
+                    MoveButton(i, j_to_move, i, j_to_move + 1);
+                }
 
-        /*1. ดึงลุกออกมาตามที่อยู่ at
-        2. เช็ค i j ของลูก
-        3. เช็คว่า i j ของลูก มีตัวไหน ตรงกับตัว empty หรือเปล่า
-        4. ถ้า มีในข้อ 3 จะทำการเลื่อน ถ้าไม่มี ก็ไม่ต้องทำอะไร
-        
-        */
+                empty_j = j;
+            }
+            else
+            {
+                //เลื่อนซ้าย
+            }
+
+        }
+        else if (j == empty_j)
+        {
+            Debug.Log("เลื่อนแนวตั้ง");
+        }
+        else
+        {
+            Debug.Log("ไม่เลื่อน");
+        }
+    }
+
+    public void MoveButton(int i_from, int j_from, int i_to, int j_to)
+    {
+        ButtonController buttonControllerIfromJfrom = null;
+
+        for (int i = 0; i < buttonControllers.Length; i++)
+        {
+            if (i_from == buttonControllers[i].GetI() && j_from == buttonControllers[i].GetJ())
+            {
+                buttonControllerIfromJfrom = buttonControllers[i];
+            }
+        }
+
+        if(buttonControllerIfromJfrom != null)
+        {
+            Vector2 newPosition = FindButtonPosition(i_to, j_to);
+            buttonControllerIfromJfrom.transform.position = new Vector3(newPosition.x, newPosition.y, buttonControllerIfromJfrom.transform.position.z);
+            buttonControllerIfromJfrom.SetIJ(i_to, j_to);
+        }
+    }
+
+    public Vector2 FindButtonPosition(int I, int J)
+    {
+        int i_count = 1;
+        int j_count = 1;
+
+        for (int i = 0; i < buttonPositions.Length; i++)
+        {
+            if(i_count == I && j_count == J)
+            {
+                return buttonPositions[i];
+            }
+
+            j_count++;
+            if(j_count > 4)
+            {
+                j_count = 1;
+                i_count++;
+            }
+        }
+
+        return Vector2.zero;
     }
 }

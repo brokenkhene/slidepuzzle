@@ -121,26 +121,75 @@ public class BoardController : MonoBehaviour {
 
     public void ShuffleBoard()
     {
-        int[] numbers = new int[buttons.Length];
-        for (int i = 0; i < numbers.Length; i++)
+        for (int i = 0; i < 1000; i++)
         {
-            numbers[i] = i + 1;
+            int to_empty_i = empty_i;
+            int to_empty_j = empty_j;
+
+            int i_or_j = Random.Range(0, 2);
+
+            if (i_or_j == 0)
+            {
+                //move i
+                if (to_empty_i == 1)
+                {
+                    //up
+                    to_empty_i = to_empty_i + 1;
+                }
+                else if (to_empty_i == 4)
+                {
+                    //down
+                    to_empty_i = to_empty_i - 1;
+                }
+                else
+                {
+                    int up_or_down = Random.Range(0, 2);
+                    if (up_or_down == 0)
+                    {
+                        //up
+                        to_empty_i = to_empty_i + 1;
+                    }
+                    else
+                    {
+                        //down
+                        to_empty_i = to_empty_i - 1;
+                    }
+                }
+            }
+            else
+            {
+                //move j
+                if (to_empty_j == 1)
+                {
+                    //left
+                    to_empty_j = to_empty_j + 1;
+                }
+                else if (to_empty_j == 4)
+                {
+                    //right
+                    to_empty_j = to_empty_j - 1;
+                }
+                else
+                {
+                    int left_or_right = Random.Range(0, 2);
+                    if (left_or_right == 0)
+                    {
+                        //left
+                        to_empty_j = to_empty_j + 1;
+                    }
+                    else
+                    {
+                        //right
+                        to_empty_j = to_empty_j - 1;
+                    }
+                }
+            }
+
+            MoveButton(to_empty_i, to_empty_j, empty_i, empty_j, true);
+
+            empty_i = to_empty_i;
+            empty_j = to_empty_j;
         }
-
-        Shuffle(numbers);
-
-        for (int i = 0; i < buttons.Length; i++)
-        {
-            buttonControllers[i].SetNumber(numbers[i]);
-        }
-
-        int to_empty_i = Random.Range(1, 5);
-        int to_empty_j = Random.Range(1, 5);
-
-        MoveButton(to_empty_i, to_empty_j, empty_i, empty_j, true);
-
-        empty_i = to_empty_i;
-        empty_j = to_empty_j;
     }
 
     void OnButtonClickAt(int at)
@@ -282,17 +331,5 @@ public class BoardController : MonoBehaviour {
         }
 
         return Vector2.zero;
-    }
-
-    void Shuffle(int[] a)
-    {
-        for (int i = a.Length - 1; i > 0; i--)
-        {
-            int rnd = Random.Range(0, i);
-            int temp = a[i];
-
-            a[i] = a[rnd];
-            a[rnd] = temp;
-        }
     }
 }
